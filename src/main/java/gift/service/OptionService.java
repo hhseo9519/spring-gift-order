@@ -52,17 +52,24 @@ public class OptionService {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new EntityNotFoundException("상품이 존재하지 않습니다."));
 
-        Option option = new Option(null, name, quantity);
+        if (optionRepository.existsByProductIdAndName(productId, name)) {
+            throw new IllegalArgumentException("이미 존재하는 옵션 이름입니다.");
+        }
+
+        Option option = new Option(product, name, quantity);
         product.addOption(option);
     }
-
 
     @Transactional
     public void updateOption(Long productId, Long optionId, String name, int quantity) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new EntityNotFoundException("상품이 존재하지 않습니다."));
 
-        Option option = product.getOptionById(optionId);
+        Option option = product.getOptions().stream()
+                .filter(o -> o.getId().equals(optionId))
+                .findFirst()
+                .orElseThrow(() -> new EntityNotFoundException("옵션을 찾을 수 없습니다."));
+
         boolean duplicate = product.getOptions().stream()
                 .anyMatch(o -> !o.getId().equals(optionId) && o.getName().equals(name));
 
@@ -78,7 +85,11 @@ public class OptionService {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new EntityNotFoundException("상품이 존재하지 않습니다."));
 
+        Option option = product.getOptions().stream()
+                .filter(o -> o.getId().equals(optionId))
+                .findFirst()
+                .orElseThrow(() -> new EntityNotFoundException("옵션을 찾을 수 없습니다."));
+
         product.removeOptionById(optionId);
     }
-
 }

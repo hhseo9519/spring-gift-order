@@ -31,11 +31,13 @@ public class Option {
     private int quantity;
 
     protected Option() {
-
     }
 
     public Option(Product product, String name, int quantity) {
-        this.product = Objects.requireNonNull(product, "상품은 필수입니다.");
+        if (product == null) {
+            throw new IllegalArgumentException("상품은 필수입니다.");
+        }
+        this.product = product;
         this.name = name;
         this.quantity = quantity;
     }
@@ -56,7 +58,6 @@ public class Option {
         return quantity;
     }
 
-
     public void subtract(int amount) {
         if (amount < 1) {
             throw new IllegalArgumentException("차감 수량은 1 이상이어야 합니다.");
@@ -66,7 +67,6 @@ public class Option {
         }
         this.quantity -= amount;
     }
-
 
     public void update(String name, int quantity) {
         this.name = name;
@@ -85,16 +85,12 @@ public class Option {
     public int hashCode() {
         return getClass().hashCode();
     }
+
     public void setProduct(Product product) {
         this.product = product;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
-
-    public Option(String name, int quantity) {
-        this.name = name;
-        this.quantity = quantity;
-    }
-
 }
