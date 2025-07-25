@@ -1,5 +1,6 @@
 package gift.service;
 
+import gift.dto.KakaoUserResponseDto;
 import gift.dto.MemberLoginRequestDto;
 import gift.dto.MemberRegisterRequestDto;
 import gift.entity.Member;
@@ -63,4 +64,24 @@ public class MemberService {
 
 
     }
+    public String loginWithKakao(KakaoUserResponseDto userInfo) {
+        Long kakaoId = userInfo.getId();
+        String rawEmail = userInfo.getKakaoAccount().getEmail();
+        String email = (rawEmail == null || rawEmail.isBlank())
+                ? "kakao_" + kakaoId + "@kakao.local"
+                : rawEmail;
+
+        Member member = memberRepository.findByKakaoId(kakaoId)
+                .orElseGet(() -> {
+                    Member newMember = new Member();
+                    newMember.setKakaoId(kakaoId);
+                    newMember.setEmail(email);
+                    newMember.setPassword("notRealPassword");
+                    return memberRepository.save(newMember);
+                });
+
+        return jwtProvider.createToken(member);
+    }
+
+
 }
