@@ -1,5 +1,6 @@
 package gift.controller;
 
+import gift.config.KakaoProperties;
 import gift.dto.KakaoTokenResponseDto;
 import gift.dto.LoginResponseDto;
 import gift.service.KakaoAuthService;
@@ -16,30 +17,24 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class LoginController {
 
     private final KakaoAuthService kakaoAuthService;
+    private final KakaoProperties kakaoProperties;
+    private final String kakaoLoginUrl;
 
-    public LoginController(KakaoAuthService kakaoAuthService) {
+    public LoginController(KakaoAuthService kakaoAuthService, KakaoProperties kakaoProperties) {
         this.kakaoAuthService = kakaoAuthService;
-    }
-
-    @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
-    private String clientId;
-
-    @Value("${spring.security.oauth2.client.registration.kakao.redirect-uri}")
-    private String redirectUri;
-
-    @Value("${spring.security.oauth2.client.provider.kakao.authorization-uri}")
-    private String authorizationUri;
-
-    @GetMapping("/login/kakao")
-    public void redirectToKakao(HttpServletResponse response) throws IOException {
-        String url = UriComponentsBuilder.fromHttpUrl(authorizationUri)
-                .queryParam("client_id", clientId)
-                .queryParam("redirect_uri", redirectUri)
+        this.kakaoProperties = kakaoProperties;
+        this.kakaoLoginUrl = UriComponentsBuilder.fromHttpUrl(
+                        kakaoProperties.getProvider().getKakao().getAuthorizationUri())
+                .queryParam("client_id", kakaoProperties.getRegistration().getKakao().getClientId())
+                .queryParam("redirect_uri", kakaoProperties.getRegistration().getKakao().getRedirectUri())
                 .queryParam("response_type", "code")
                 .build()
                 .toUriString();
+    }
 
-        response.sendRedirect(url);
+    @GetMapping("/login/kakao")
+    public void redirectToKakao(HttpServletResponse response) throws IOException {
+        response.sendRedirect(kakaoLoginUrl);
     }
 
     @GetMapping("/oauth/kakao")

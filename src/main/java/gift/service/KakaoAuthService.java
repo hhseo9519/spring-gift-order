@@ -1,5 +1,6 @@
 package gift.service;
 
+import gift.config.KakaoProperties;
 import gift.dto.KakaoTokenResponseDto;
 import gift.dto.KakaoUserResponseDto;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,25 +13,19 @@ import org.springframework.web.client.RestClient;
 public class KakaoAuthService {
 
     private final MemberService memberService;
+    private final KakaoProperties kakaoProperties;
     private final RestClient restClient = RestClient.create();
 
-    @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
-    private String clientId;
-
-    @Value("${spring.security.oauth2.client.registration.kakao.redirect-uri}")
-    private String redirectUri;
-
-    @Value("${spring.security.oauth2.client.provider.kakao.token-uri}")
-    private String tokenUri;
-
-    @Value("${spring.security.oauth2.client.provider.kakao.user-info-uri}")
-    private String userInfoUri;
-
-    public KakaoAuthService(MemberService memberService) {
+    public KakaoAuthService(MemberService memberService, KakaoProperties kakaoProperties) {
         this.memberService = memberService;
+        this.kakaoProperties = kakaoProperties;
     }
 
     public KakaoTokenResponseDto requestAccessToken(String code) {
+        String clientId = kakaoProperties.getRegistration().getKakao().getClientId();
+        String redirectUri = kakaoProperties.getRegistration().getKakao().getRedirectUri();
+        String tokenUri = kakaoProperties.getProvider().getKakao().getTokenUri();
+
         return restClient.post()
                 .uri(tokenUri)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -42,7 +37,9 @@ public class KakaoAuthService {
                 .body(KakaoTokenResponseDto.class);
     }
 
-    public KakaoUserResponseDto requestUserInfo(String accessToken) {
+    private KakaoUserResponseDto requestUserInfo(String accessToken) {
+        String userInfoUri = kakaoProperties.getProvider().getKakao().getUserInfoUri();
+
         return restClient.get()
                 .uri(userInfoUri)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
