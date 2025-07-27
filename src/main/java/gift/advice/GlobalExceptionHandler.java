@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.RestClientException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -54,11 +57,35 @@ public class GlobalExceptionHandler {
         error.put("error", ex.getMessage());
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
     }
+
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleEntityNotFound(EntityNotFoundException ex) {
         Map<String, String> error = new HashMap<>();
         error.put("error", ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+    @ExceptionHandler(HttpClientErrorException.class)
+    public ResponseEntity<Map<String, String>> handleHttpClientError(HttpClientErrorException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("error", "카카오 요청 오류 (클라이언트)");
+        error.put("message", ex.getStatusText());
+        return ResponseEntity.status(ex.getStatusCode()).body(error);
+    }
+
+    @ExceptionHandler(HttpServerErrorException.class)
+    public ResponseEntity<Map<String, String>> handleHttpServerError(HttpServerErrorException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("error", "카카오 서버 오류");
+        error.put("message", ex.getStatusText());
+        return ResponseEntity.status(ex.getStatusCode()).body(error);
+    }
+
+    @ExceptionHandler(RestClientException.class)
+    public ResponseEntity<Map<String, String>> handleRestClientException(RestClientException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("error", "카카오 API 통신 오류");
+        error.put("message", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(error);
     }
 
 }
