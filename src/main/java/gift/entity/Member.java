@@ -17,21 +17,22 @@ public class Member {
 
     @Column(nullable = false, unique = true)
     private String email;
-    @Column(nullable = false)
 
+    @Column(nullable = false)
     private String password;
+
+    @Column(unique = true, nullable = true)
+    private Long kakaoId;
+
 
     public Member() {
     }
 
-    public Member(Long id, String email, String password) {
-
-        this.id = id;
+    public Member(Long kakaoId, String email, String password) {
+        this.kakaoId = kakaoId;
         this.email = email;
         this.password = password;
     }
-
-
 
     public Member(String email, String password) {
         this.email = email;
@@ -48,14 +49,5 @@ public class Member {
 
     public String getPassword() {
         return password;
-    }
-
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 }

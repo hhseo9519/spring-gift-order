@@ -1,7 +1,8 @@
 package gift.service;
-
-import gift.dto.MemberLoginRequestDto;
-import gift.dto.MemberRegisterRequestDto;
+import static gift.util.MemberEmailResolver.resolveEmail;
+import gift.dto.KakaoUserResponseDto;
+import gift.dto.LocalLoginRequestDto;
+import gift.dto.LocalRegisterRequestDto;
 import gift.entity.Member;
 import gift.exception.EmailAlreadyExistsException;
 import gift.exception.InvalidLoginException;
@@ -25,7 +26,8 @@ public class MemberService {
         this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
-    public String register(MemberRegisterRequestDto requestDto) {
+    public String register(LocalRegisterRequestDto requestDto) {
+
 
         if (memberRepository.existsByEmail(requestDto.email())) {
             throw new EmailAlreadyExistsException();
@@ -39,9 +41,7 @@ public class MemberService {
 
         return jwtProvider.createToken(saved);
     }
-
-    public String login(MemberLoginRequestDto requestDto) {
-
+    public String login(LocalLoginRequestDto requestDto) {
         Member member = memberRepository.findByEmail(requestDto.email())
                 .orElseThrow(InvalidLoginException::new);
 
@@ -62,5 +62,18 @@ public class MemberService {
         return Long.parseLong(subject);
 
 
+    }
+
+    public String loginWithKakao(KakaoUserResponseDto userInfo) {
+        Long kakaoId = userInfo.getId();
+        String email = resolveEmail(userInfo);
+
+        Member member = memberRepository.findByKakaoId(kakaoId)
+                .orElseGet(() -> {
+                    Member newMember = new Member(kakaoId, email, "notRealPassword");
+                    return memberRepository.save(newMember);
+                });
+
+        return jwtProvider.createToken(member);
     }
 }

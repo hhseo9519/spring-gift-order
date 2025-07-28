@@ -42,3 +42,7 @@ out/
 *.iml
 build/
 out/
+
+# 환경 변수 및 민감 설정 파일
+.env
+application-secret.properties

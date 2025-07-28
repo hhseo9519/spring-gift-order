@@ -1,9 +1,8 @@
 package gift.controller;
-
-import gift.dto.MemberLoginRequestDto;
-import gift.dto.MemberLoginResponseDto;
-import gift.dto.MemberRegisterRequestDto;
-import gift.dto.MemberRegisterResponseDto;
+import gift.dto.LocalLoginRequestDto;
+import gift.dto.LocalLoginResponseDto;
+import gift.dto.LocalRegisterRequestDto;
+import gift.dto.LocalRegisterResponseDto;
 import gift.service.MemberService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -25,24 +24,23 @@ public class MemberController {
 
 
     @PostMapping("/register")
-    public ResponseEntity<MemberRegisterResponseDto> registerMember(
-            @RequestBody @Valid MemberRegisterRequestDto requestDto) {
+    public ResponseEntity<LocalRegisterResponseDto> registerMember(
+            @RequestBody @Valid LocalRegisterRequestDto requestDto) {
 
         String token = memberService.register(requestDto);
-        MemberRegisterResponseDto responseDto = new MemberRegisterResponseDto(token);
+        LocalRegisterResponseDto responseDto = new LocalRegisterResponseDto(token);
+
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
 
     }
 
     @PostMapping("/login")
-    public ResponseEntity<MemberLoginResponseDto> loginMember(
-            @RequestBody @Valid MemberLoginRequestDto requestDto) {
+
+    public ResponseEntity<LocalLoginResponseDto> loginMember(
+            @RequestBody @Valid LocalLoginRequestDto requestDto) {
 
         String token = memberService.login(requestDto);
-        MemberLoginResponseDto responseDto = new MemberLoginResponseDto(token);
-
+        LocalLoginResponseDto responseDto = new LocalLoginResponseDto(token);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
-
-
 }
