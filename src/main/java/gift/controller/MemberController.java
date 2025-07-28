@@ -1,5 +1,4 @@
 package gift.controller;
-
 import gift.dto.LocalLoginRequestDto;
 import gift.dto.LocalLoginResponseDto;
 import gift.dto.LocalRegisterRequestDto;
@@ -30,19 +29,18 @@ public class MemberController {
 
         String token = memberService.register(requestDto);
         LocalRegisterResponseDto responseDto = new LocalRegisterResponseDto(token);
+
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
 
     }
 
     @PostMapping("/login")
+
     public ResponseEntity<LocalLoginResponseDto> loginMember(
             @RequestBody @Valid LocalLoginRequestDto requestDto) {
 
         String token = memberService.login(requestDto);
         LocalLoginResponseDto responseDto = new LocalLoginResponseDto(token);
-
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
-
-
 }

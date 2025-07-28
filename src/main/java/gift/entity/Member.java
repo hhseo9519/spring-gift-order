@@ -24,6 +24,7 @@ public class Member {
     @Column(unique = true, nullable = true)
     private Long kakaoId;
 
+
     public Member() {
     }
 
