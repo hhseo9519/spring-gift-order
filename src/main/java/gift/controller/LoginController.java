@@ -2,11 +2,10 @@ package gift.controller;
 
 import gift.config.KakaoProperties;
 import gift.dto.KakaoTokenResponseDto;
-import gift.dto.LoginResponseDto;
+import gift.dto.KakaoLoginResponseDto;
 import gift.service.KakaoAuthService;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,9 +37,9 @@ public class LoginController {
     }
 
     @GetMapping("/oauth/kakao")
-    public ResponseEntity<LoginResponseDto> receiveAuthCode(@RequestParam("code") String code) {
+    public ResponseEntity<KakaoLoginResponseDto> receiveAuthCode(@RequestParam("code") String code) {
         KakaoTokenResponseDto token = kakaoAuthService.requestAccessToken(code);
         String jwt = kakaoAuthService.loginWithKakao(token.getAccessToken());
-        return ResponseEntity.ok(new LoginResponseDto(jwt));
+        return ResponseEntity.ok(new KakaoLoginResponseDto(jwt));
     }
 }

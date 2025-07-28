@@ -1,9 +1,9 @@
 package gift.dto;
 
-public class LoginResponseDto {
+public class KakaoLoginResponseDto {
     private final String token;
 
-    public LoginResponseDto(String token) {
+    public KakaoLoginResponseDto(String token) {
         this.token = token;
     }
 
