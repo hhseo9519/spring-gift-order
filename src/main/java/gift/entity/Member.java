@@ -49,20 +49,4 @@ public class Member {
     public String getPassword() {
         return password;
     }
-
-    public Long getKakaoId() {
-        return kakaoId;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setKakaoId(Long kakaoId) {
-        this.kakaoId = kakaoId;
-    }
 }
