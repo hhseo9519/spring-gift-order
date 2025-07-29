@@ -2,6 +2,7 @@ package gift.advice;
 
 import gift.exception.EmailAlreadyExistsException;
 import gift.exception.InvalidLoginException;
+import gift.exception.OptionNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -87,5 +88,11 @@ public class GlobalExceptionHandler {
         error.put("message", ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(error);
     }
+
+    @ExceptionHandler(OptionNotFoundException.class)
+    public ResponseEntity<?> handleOptionNotFound(OptionNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", e.getMessage()));
+    }
+
 
 }
