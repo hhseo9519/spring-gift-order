@@ -1,7 +1,5 @@
 package gift.service;
-
 import static gift.util.MemberEmailResolver.resolveEmail;
-
 import gift.dto.KakaoUserResponseDto;
 import gift.dto.LocalLoginRequestDto;
 import gift.dto.LocalRegisterRequestDto;
@@ -29,7 +27,6 @@ public class MemberService {
     }
 
     public String register(LocalRegisterRequestDto requestDto) {
-
         if (memberRepository.existsByEmail(requestDto.email())) {
             throw new EmailAlreadyExistsException();
         }
@@ -66,11 +63,13 @@ public class MemberService {
 
 
     }
+
     public String loginWithKakao(KakaoUserResponseDto userInfo, String kakaoAccessToken) {
         Long kakaoId = userInfo.getId();
         String email = resolveEmail(userInfo);
 
         Member member = memberRepository.findByKakaoId(kakaoId)
+
                 .orElseGet(() -> new Member(kakaoId, email, "notRealPassword"));
 
         member.setKakaoAccessToken(kakaoAccessToken);
@@ -78,5 +77,4 @@ public class MemberService {
 
         return jwtProvider.createToken(saved);
     }
-
 }

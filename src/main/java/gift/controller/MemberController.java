@@ -1,5 +1,4 @@
 package gift.controller;
-
 import gift.dto.LocalLoginRequestDto;
 import gift.dto.LocalLoginResponseDto;
 import gift.dto.LocalRegisterRequestDto;
@@ -43,6 +42,7 @@ public class MemberController {
 
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
+
 
 
 }

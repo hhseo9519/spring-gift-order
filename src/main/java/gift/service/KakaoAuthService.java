@@ -57,7 +57,9 @@ public class KakaoAuthService {
 
     public String loginWithKakao(String accessToken) {
         KakaoUserResponseDto userInfo = requestUserInfo(accessToken);
+
         return memberService.loginWithKakao(userInfo, accessToken);
+
     }
 }
 

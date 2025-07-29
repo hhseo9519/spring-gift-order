@@ -20,3 +20,4 @@ INSERT INTO options (product_id, name, quantity) VALUES
 
 INSERT INTO wishlist (member_id, product_id, quantity) VALUES
   (1, 1, 1);
+

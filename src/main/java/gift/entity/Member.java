@@ -1,11 +1,9 @@
 package gift.entity;
-
 import jakarta.persistence.*;
 
 @Entity
 @Table
 public class Member {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -15,7 +13,6 @@ public class Member {
 
     @Column(nullable = false)
     private String password;
-
     @Column(unique = true)
     private Long kakaoId;
 
@@ -24,6 +21,7 @@ public class Member {
     private String kakaoAccessToken;
 
     protected Member() {
+
     }
 
     public Member(Long kakaoId, String email, String password) {
