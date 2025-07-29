@@ -13,6 +13,8 @@ import org.springframework.web.client.RestClient;
 @Service
 public class KakaoAuthService {
 
+    private static final int TIMEOUT_MILLISECONDS = 5000;
+
     private final MemberService memberService;
     private final KakaoProperties kakaoProperties;
     private final RestClient restClient;
@@ -21,8 +23,8 @@ public class KakaoAuthService {
         this.memberService = memberService;
         this.kakaoProperties = kakaoProperties;
         SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
-        factory.setConnectTimeout(5000);
-        factory.setReadTimeout(5000);
+        factory.setConnectTimeout(TIMEOUT_MILLISECONDS);
+        factory.setReadTimeout(TIMEOUT_MILLISECONDS);
 
         this.restClient = RestClient.builder()
                 .requestFactory(factory)
@@ -44,7 +46,6 @@ public class KakaoAuthService {
                 .body(KakaoTokenResponseDto.class);
     }
 
-
     private KakaoUserResponseDto requestUserInfo(String accessToken) {
         String userInfoUri = kakaoProperties.getProvider().getKakao().getUserInfoUri();
 
@@ -62,4 +63,3 @@ public class KakaoAuthService {
 
     }
 }
-
