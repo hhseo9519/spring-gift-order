@@ -1,16 +1,11 @@
 package gift.entity;
 
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table
 public class Member {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,10 +16,14 @@ public class Member {
     @Column(nullable = false)
     private String password;
 
-    @Column(unique = true, nullable = true)
+    @Column(unique = true)
     private Long kakaoId;
 
-    public Member() {
+
+    @Column
+    private String kakaoAccessToken;
+
+    protected Member() {
     }
 
     public Member(Long kakaoId, String email, String password) {
@@ -48,5 +47,12 @@ public class Member {
 
     public String getPassword() {
         return password;
+    }
+
+    public String getKakaoAccessToken() {
+        return kakaoAccessToken;
+    }
+    public void setKakaoAccessToken(String kakaoAccessToken) {
+        this.kakaoAccessToken = kakaoAccessToken;
     }
 }

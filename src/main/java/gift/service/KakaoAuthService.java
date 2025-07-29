@@ -4,7 +4,6 @@ import gift.config.KakaoProperties;
 import gift.dto.KakaoTokenRequestDto;
 import gift.dto.KakaoTokenResponseDto;
 import gift.dto.KakaoUserResponseDto;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
@@ -58,7 +57,7 @@ public class KakaoAuthService {
 
     public String loginWithKakao(String accessToken) {
         KakaoUserResponseDto userInfo = requestUserInfo(accessToken);
-        return memberService.loginWithKakao(userInfo);
+        return memberService.loginWithKakao(userInfo, accessToken);
     }
 }
 

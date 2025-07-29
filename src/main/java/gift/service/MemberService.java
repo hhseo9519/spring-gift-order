@@ -66,17 +66,17 @@ public class MemberService {
 
 
     }
-    public String loginWithKakao(KakaoUserResponseDto userInfo) {
+    public String loginWithKakao(KakaoUserResponseDto userInfo, String kakaoAccessToken) {
         Long kakaoId = userInfo.getId();
         String email = resolveEmail(userInfo);
 
         Member member = memberRepository.findByKakaoId(kakaoId)
-                .orElseGet(() -> {
-                    Member newMember = new Member(kakaoId, email, "notRealPassword");
-                    return memberRepository.save(newMember);
-                });
+                .orElseGet(() -> new Member(kakaoId, email, "notRealPassword"));
 
-        return jwtProvider.createToken(member);
+        member.setKakaoAccessToken(kakaoAccessToken);
+        Member saved = memberRepository.save(member);
+
+        return jwtProvider.createToken(saved);
     }
 
 }
