@@ -2,20 +2,18 @@ package gift.advice;
 
 import gift.exception.EmailAlreadyExistsException;
 import gift.exception.InvalidLoginException;
+import gift.exception.OptionNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.HashMap;
 import java.util.Map;
-
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestClientException;
-
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -59,7 +57,7 @@ public class GlobalExceptionHandler {
         error.put("error", ex.getMessage());
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
     }
-    
+
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleEntityNotFound(EntityNotFoundException ex) {
         Map<String, String> error = new HashMap<>();
@@ -89,6 +87,12 @@ public class GlobalExceptionHandler {
         error.put("error", "카카오 API 통신 오류");
         error.put("message", ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(error);
+    }
+
+
+    @ExceptionHandler(OptionNotFoundException.class)
+    public ResponseEntity<?> handleOptionNotFound(OptionNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", e.getMessage()));
     }
 
 }

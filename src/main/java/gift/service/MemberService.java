@@ -27,8 +27,6 @@ public class MemberService {
     }
 
     public String register(LocalRegisterRequestDto requestDto) {
-
-
         if (memberRepository.existsByEmail(requestDto.email())) {
             throw new EmailAlreadyExistsException();
         }
@@ -41,7 +39,9 @@ public class MemberService {
 
         return jwtProvider.createToken(saved);
     }
+
     public String login(LocalLoginRequestDto requestDto) {
+
         Member member = memberRepository.findByEmail(requestDto.email())
                 .orElseThrow(InvalidLoginException::new);
 
@@ -64,16 +64,17 @@ public class MemberService {
 
     }
 
-    public String loginWithKakao(KakaoUserResponseDto userInfo) {
+    public String loginWithKakao(KakaoUserResponseDto userInfo, String kakaoAccessToken) {
         Long kakaoId = userInfo.getId();
         String email = resolveEmail(userInfo);
 
         Member member = memberRepository.findByKakaoId(kakaoId)
-                .orElseGet(() -> {
-                    Member newMember = new Member(kakaoId, email, "notRealPassword");
-                    return memberRepository.save(newMember);
-                });
 
-        return jwtProvider.createToken(member);
+                .orElseGet(() -> new Member(kakaoId, email, "notRealPassword"));
+
+        member.setKakaoAccessToken(kakaoAccessToken);
+        Member saved = memberRepository.save(member);
+
+        return jwtProvider.createToken(saved);
     }
 }

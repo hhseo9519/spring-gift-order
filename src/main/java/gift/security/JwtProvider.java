@@ -7,15 +7,17 @@ import io.jsonwebtoken.security.Keys;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
-
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class JwtProvider {
 
-    private static final SecretKey KEY = Keys.hmacShaKeyFor(
-            "Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E=".getBytes(StandardCharsets.UTF_8)
-    );
+    private final SecretKey KEY;
+
+    public JwtProvider(@Value("${jwt.secret}") String secret) {
+        this.KEY = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+    }
 
     public String createToken(Member member) {
         if (member.getId() == null) {

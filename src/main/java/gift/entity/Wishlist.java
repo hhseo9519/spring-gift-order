@@ -24,7 +24,6 @@ public class Wishlist {
     public Wishlist() {}
 
 
-    // 생성자: member, product 객체 받아서 wishlist 생성
     public Wishlist(Member member, Product product) {
         this.member = member;
         this.product = product;
