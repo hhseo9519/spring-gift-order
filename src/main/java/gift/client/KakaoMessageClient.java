@@ -8,13 +8,14 @@ import gift.dto.TextLink;
 import gift.dto.TextTemplate;
 import gift.entity.Member;
 import gift.entity.Order;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
+
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+
 @Component
 public class KakaoMessageClient {
 
@@ -24,13 +25,10 @@ public class KakaoMessageClient {
     private final RestClient restClient;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    @Value("${kakao.api.host:https://kapi.kakao.com}")
-    private String kakaoApiHost;
-
     public KakaoMessageClient(KakaoMessageProperties properties) {
         SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
-        factory.setConnectTimeout(properties.getTimeout());
-        factory.setReadTimeout(properties.getTimeout());
+        factory.setConnectTimeout(TIMEOUT_MILLISECONDS);
+        factory.setReadTimeout(TIMEOUT_MILLISECONDS);
 
         this.restClient = RestClient.builder()
                 .baseUrl(properties.getHost())
@@ -53,7 +51,6 @@ public class KakaoMessageClient {
             throw new RuntimeException("카카오 메시지 발송 실패: 응답 없음 또는 실패 응답");
         }
     }
-
 
     private String createTemplateObject(Order order) {
         String message = String.format(

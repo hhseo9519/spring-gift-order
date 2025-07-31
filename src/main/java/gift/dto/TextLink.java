@@ -8,4 +8,6 @@ public class TextLink {
         this.web_url = url;
         this.mobile_web_url = url;
     }
+    public String getWeb_url() { return web_url; }
+    public String getMobile_web_url() { return mobile_web_url; }
 }
