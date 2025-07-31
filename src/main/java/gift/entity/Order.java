@@ -1,6 +1,7 @@
 package gift.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import java.time.LocalDateTime;
 
 @Entity
@@ -17,17 +18,22 @@ public class Order {
     @ManyToOne(fetch = FetchType.LAZY)
     private Option option;
 
+    @Column(nullable = false)
     private int quantity;
 
+    @Column(length = 200)
     private String message;
 
+    @Column(nullable = false)
     private LocalDateTime orderDateTime;
-
 
     protected Order() {}
 
 
     public Order(Member member, Option option, int quantity, String message) {
+        if (quantity <= 0) {
+            throw new IllegalArgumentException("수량은 1 이상이어야 합니다.");
+        }
         this.member = member;
         this.option = option;
         this.quantity = quantity;
