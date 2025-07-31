@@ -3,19 +3,26 @@ package gift.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class TextTemplate {
-    private final String object_type = "text";
-    private String text;
-    private TextLink link;
-    private String button_title;
+    @JsonProperty("object_type")
+    private final String objectType = "text";
 
-    public TextTemplate(String text, TextLink link, String button_title) {
+    @JsonProperty("text")
+    private String text;
+
+    @JsonProperty("link")
+    private TextLink link;
+
+    @JsonProperty("button_title")
+    private String buttonTitle;
+
+    public TextTemplate(String text, TextLink link, String buttonTitle) {
         this.text = text;
         this.link = link;
-        this.button_title = button_title;
+        this.buttonTitle = buttonTitle;
     }
 
-    public String getObject_type() {
-        return object_type;
+    public String getObjectType() {
+        return objectType;
     }
 
     public String getText() {
@@ -26,7 +33,7 @@ public class TextTemplate {
         return link;
     }
 
-    public String getButton_title() {
-        return button_title;
+    public String getButtonTitle() {
+        return buttonTitle;
     }
 }
