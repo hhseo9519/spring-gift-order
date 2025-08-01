@@ -3,6 +3,7 @@ package gift.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class TextTemplate {
+  
     @JsonProperty("object_type")
     private final String objectType = "text";
 
@@ -23,6 +24,7 @@ public class TextTemplate {
 
     public String getObjectType() {
         return objectType;
+
     }
 
     public String getText() {
@@ -32,7 +34,7 @@ public class TextTemplate {
     public TextLink getLink() {
         return link;
     }
-
+  
     public String getButtonTitle() {
         return buttonTitle;
     }
